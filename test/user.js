@@ -36,6 +36,17 @@ contract ('User', () => {
         assert(false);
     });
 
+    //Verify
+    it ('Test user verify successful', async () => {
+        const b = await user_c.verify('user_ten', 'pass1');
+        const b2 = await user_c.verify('user_one', 'pass2');
+        const b3 = await user_c.verify('user_one', 'pass1');
+        
+        assert(b === false);
+        assert(b2 === false);
+        assert(b3 === true);
+    });
+
     //User update
     it ('Test user update successful', async () => {
         await user_c.create('user_too', 'pass2');

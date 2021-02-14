@@ -30,6 +30,16 @@ contract User {
         return (users[i].name, users[i].id);
     }
     
+    function verify(string memory in_name, string memory pass_hash) public view returns(bool){
+        if(!user_exists(in_name)){
+            return false;
+        }
+
+        uint256 i = find(in_name);
+        if(is_str_equal(users[i].pass_hash, pass_hash)) return true;
+        else return false;
+    }
+
     function update(string memory old_user_name, string memory new_user_name) public {
         if(user_exists(new_user_name)){
             revert('update: new username is invalid');
