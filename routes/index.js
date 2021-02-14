@@ -12,9 +12,9 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
-router.get('/cardComments', (req, res) => {
+router.get('/CommentPage', (req, res) => {
   console.log('Request for login recieved');
-  res.render('cardComments');
+  res.render('CommentPage');
 });
 
 module.exports = router;
