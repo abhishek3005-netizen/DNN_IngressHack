@@ -1,0 +1,76 @@
+<div class="content">
+			<div class="top-section">
+				<div class="user-img">
+					<img src="http://nicesnippets.com/demo/man.png">
+				</div>
+				<div class="user-detail">
+					<p>Andrew Filander</p>
+					<span>Shared publicly - Jan 20 , 2018</span>
+				</div>
+				<div style="clear:both;"></div>			
+			</div>
+			<div class="comment-content">
+				<span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore xcepteur sint occaecat cupidatat non
+				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span>
+			</div>
+
+			<div class="sub-comment"></div>
+			
+			<div class="comment-box box">
+				<div class="count-btn">
+					<button class="btn">+1</button>
+				</div>
+				<div class="enter-btn">
+					<button class="btn"><i class="fas fa-sign-out-alt"></i> </button>
+				</div>
+				<div style="clear:both;"></div>
+				<div class="comment-btn">
+					<input type="textarea" class="text" rows="10" cols="30" placeholder="Add a comment...">
+				</div>
+			</div>
+		</div>
+		<div class="add-comment">
+			<div class="box">
+				<div class="add-comment-img">
+					<img src="http://nicesnippets.com/demo/man03.png">
+				</div>
+				<div class="add-comment-text">
+					<textarea rows="5" class="example-textarea"></textarea>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+			<div class="add-comment-text-btn">
+				<button class="post-comment-btn">Post Comment</button>
+				<button class="cancel-btn">Cancel</button>
+			</div>
+		</div>
+    </div>
+   <script>
+    $(".text").click(function(){
+        $(".text").hide();
+    }); 
+    
+    $(".cancel-btn").click(function(){
+        $(".text").show();
+    });
+    
+    $('.text').click(function(){
+        $(".add-comment").slideToggle();
+    });
+    
+    $('.post-comment-btn').click(function(){ 
+        var data = $('.example-textarea').val();
+        if(!data){
+            alert("Plese Enter value after click button post comment..");
+        }else{
+            $('.example-textarea').val('');
+            $(".sub-comment").append('<div class="example"><div class="comment-img"><img src="http://nicesnippets.com/demo/man03.png" class="example"></div><div class="comment"><p>'+ data +'</p></div><div style="clear:both;"></div></div>');
+        }
+    });
+    
+    $(".cancel-btn").click(function(){
+        $(".add-comment").hide();
+    });
+
+</script>

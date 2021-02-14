@@ -12,4 +12,9 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
+router.get('/cardComments', (req, res) => {
+  console.log('Request for login recieved');
+  res.render('cardComments');
+});
+
 module.exports = router;
