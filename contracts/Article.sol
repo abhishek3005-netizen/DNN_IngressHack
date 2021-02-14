@@ -4,6 +4,7 @@ pragma solidity ^0.5.0;
 contract Article {
     struct s_Com {
         uint256 c_id;
+        string a_id;
         
         string user_name;
         string text;
@@ -18,10 +19,10 @@ contract Article {
     
     struct s_Article {
         string a_id;
-        uint256 com_nextId;
-        s_Com[] comments;
     }
     
+    uint256 com_nextId = 1;
+    s_Com[] comments;
     s_Article[] articles;
     
     
@@ -32,7 +33,6 @@ contract Article {
         
         s_Article memory art;
         art.a_id = a_id;
-        art.com_nextId = 1;
         articles.push(art);
     }
     
@@ -47,46 +47,53 @@ contract Article {
     function get_comment(uint256 index, string memory a_id) public view returns 
     (uint256 c_id, string memory user_name, string memory text, string memory date, string memory time, uint256 upvotes, uint256 downvotes){
         
-        uint256 j = find_article(a_id);
-        
-        s_Com[] memory coms = articles[j].comments;
-        
-        if(index >= coms.length)
-            revert('get_comment : invalid index');
+
+        if(index >= comments.length)
+            revert('get_comment1 : invalid index');
         
         uint256 k = 0;
-        uint256 i = 0;
-        for(i = 0; i < coms.length; i++){
-            if(k == index) break;
-            if(coms[i].parent_cid == 0) k++;
+        uint256 cur_index = 0;
+        for(uint256 i = 0; i < comments.length; i++){
+
+            if(comments[i].parent_cid == 0 && is_str_equal(comments[i].a_id, a_id)){
+                cur_index = i;
+                k++;
+            }
+
+            if(k - 1 == index) break;
         }
         
-        if(k != index)
-            revert('get_comment : invalid index');
+        if(k - 1 != index)
+            revert('get_comment2 : invalid index');
         
-        s_Com memory com = coms[i];
+        s_Com memory com = comments[cur_index];
         return (com.c_id, com.user_name, com.text, com.date, com.time, com.upvotes, com.downvotes);
     }
     
     function get_reply(uint256 index, uint256 p_c_id, string memory a_id) public view returns
     (uint256 c_id, string memory user_name, string memory text, string memory date, string memory time, uint256 upvotes, uint256 downvotes){
-        uint256 j = find_article(a_id);
-        uint256 num_rep = num_replies_to_com(articles[j].comments, p_c_id);
+        //uint256 num_rep = num_replies_to_com(p_c_id, a_id);
         
-        if(index >= num_rep){
-            revert('get_reply : invalid reply');
+        if(index >= comments.length){
+            revert('get_reply1 : invalid index');
         }
         
-        s_Com[] memory coms = articles[j].comments;
+
         uint256 k = 0;
-        uint256 i = 0;
-        for(i = 0; i <= coms.length; i++){
-            if(k == index) break;
-            if(coms[i].parent_cid == p_c_id)
+        uint256 cur_index = 0;
+        for(uint256 i = 0; i < comments.length; i++){
+
+            if(comments[i].parent_cid == p_c_id && is_str_equal(comments[i].a_id, a_id)){
                 k++;
+                cur_index = i;
+            }
+            if(k - 1 == index) break;
         }
-    
-        s_Com memory com = coms[i];
+
+        if(k - 1 != index)
+            revert('get_reply2 : invalid index');
+
+        s_Com memory com = comments[cur_index];
         return (com.c_id, com.user_name, com.text, com.date, com.time, com.upvotes, com.downvotes);
     }
 
@@ -97,11 +104,10 @@ contract Article {
                                     string memory time,
                                     uint256 upvotes, 
                                     uint256 downvotes) public {
-        
-        uint256 i = find_article(a_id); 
-        s_Com memory com = create_comment(articles[i].com_nextId, 0, user_name, text, date, time, upvotes, downvotes);
-        articles[i].comments.push(com);
-        articles[i].com_nextId++;
+
+        s_Com memory com = create_comment(com_nextId, a_id, 0, user_name, text, date, time, upvotes, downvotes);
+        comments.push(com);
+        com_nextId++;
     }
     
     
@@ -113,25 +119,26 @@ contract Article {
                                   string memory time,
                                   uint256 upvotes, 
                                   uint256 downvotes) public {
-        uint256 i = find_article(a_id);
-        uint256 j = find_comment(c_id, articles[i].comments);
         
-        s_Com memory rep = create_comment(articles[i].com_nextId, c_id, user_name, text, date, time, upvotes, downvotes);
-        articles[i].comments.push(rep);
+        s_Com memory rep = create_comment(com_nextId, a_id, c_id, user_name, text, date, time, upvotes, downvotes);
+        comments.push(rep);
+        com_nextId++;
     }
     
     
     function create_comment(uint256 c_id,
+                            string memory a_id,
                             uint256 parent_cid,
                             string memory user_name,
                             string memory text,
                             string memory date,
                             string memory time,
                             uint256 upvotes, 
-                            uint256 downvotes) internal view returns(s_Com memory){
+                            uint256 downvotes) internal pure returns(s_Com memory){
     
         s_Com memory com;
         com.c_id = c_id;
+        com.a_id = a_id;
         com.parent_cid = parent_cid;
         com.user_name = user_name;
         com.text = text;
@@ -153,9 +160,9 @@ contract Article {
         revert('find article: invalid article id');
     }
     
-    function find_comment(uint256 c_id, s_Com[] memory coms) internal view returns (uint256){
-        for(uint256 i = 0; i < coms.length; i++){
-            if(coms[i].c_id == c_id){
+    function find_comment(uint256 c_id) internal view returns (uint256){
+        for(uint256 i = 0; i < comments.length; i++){
+            if(comments[i].c_id == c_id){
                 return i;
             }
         }
@@ -173,10 +180,10 @@ contract Article {
         return false;
     }
     
-    function num_replies_to_com(s_Com[] memory coms, uint256 p_c_id) internal view returns(uint256){
-        uint256 count;
-        for(uint256 i = coms.length - 1; i >= 1; i++){
-            if(coms[i].parent_cid == p_c_id){
+    function num_replies_to_com(uint256 p_c_id, string memory a_id) internal view returns(uint256){
+        uint256 count = 0;
+        for(uint256 i = 0; i < comments.length; i++){
+            if(comments[i].parent_cid == p_c_id && is_str_equal(comments[i].a_id, a_id)){
                 count++;
             }
         }
