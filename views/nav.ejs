@@ -4,15 +4,15 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" 
     data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+	</button>
+	<a href="/CommentPage">Temporary Link to cards</a>
+	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ml-auto">
-        <div class="nav-item nav-link" ><a href="#LoginModal" class="trigger-btn" data-toggle="modal"><button class="btn btn-primary">Signup or Login</button></a></div>
-        </div>
+        <div class="nav-item nav-link" ><a href="#SignupModal" class="trigger-btn" data-toggle="modal"><button class="btn btn-primary">Signup</button></a></div>
+		<div class="nav-item nav-link" ><a href="#LoginModal" class="trigger-btn" data-toggle="modal"><button class="btn btn-primary">Login</button></a></div>
+	 </div>
 	</div>
-	<a href="/cardComments">Temporary Link to cards</a>
 </nav>
-
 
 <!-- Login Modal -->
 <div id="LoginModal" class="modal fade">
@@ -34,9 +34,7 @@
 						</div>
 						<input type="password" class="form-control" required="required">
                      </div>
-                    <a href="#" class="float-right text-muted"><small>Don't have an account?</small></a><a href="#myModal" class="trigger-btn" data-toggle="modal"><button class="btn btn-primary e-small-btn">SignUp</button></a>
-                   
-				</div>
+                   </div>
 				<div class="modal-footer justify-content-between">
 				   <input type="submit" class="btn btn-primary" value="Login" id="e-login-button">
 				</div>
@@ -45,9 +43,8 @@
 	</div>
 </div>  
 
-
 <!-- Signup Modal -->
-<div id="myModal" class="modal fade">
+<div id="SignupModal" class="modal fade">
 	<div class="modal-dialog modal-login">
 		<div class="modal-content">
 			<form action="/examples/actions/confirmation.php" method="post">
@@ -72,9 +69,7 @@
 						</div>
 						<input type="password" class="form-control" required="required">
                      </div>
-                    <a href="#" class="float-right text-muted"><small>Already have an account?</small> </a><a href="#LoginModal" class="trigger-btn" data-toggle="modal"><button class="btn btn-primary e-small-btn">Login</button></a>
-                   
-				</div>
+                   </div>
 				<div class="modal-footer justify-content-between">
 				   <input type="submit" class="btn btn-primary" value="SignUp" id="e-login-button">
 				</div>
@@ -82,5 +77,4 @@
 		</div>
 	</div>
 </div>  
-
 </div>
